@@ -21,8 +21,12 @@ assetToBalance = {}
 #endregion
 
 ############################################################
+cancelFillStackHeight = 0
+
+############################################################
 datahandlermodule.initialize = () ->
     log "datahandlermodule.initialize"
+    cancelFillStackHeight = allModules.configmodule.cancelFillStackHeight
     return
 
 ############################################################
@@ -32,6 +36,9 @@ compareSells = (el1, el2) ->
 
 compareBuys = (el1, el2) ->
     return el2.price - el1.price
+
+compareOldOrders = (el1, el2) ->
+    return el2.time - el1.time
 
 #endregion
     
@@ -47,11 +54,15 @@ datahandlermodule.setAssetBalance = (asset, balance) ->
 
 datahandlermodule.setCancelledStack = (pair, cancelledStack) ->
     log "datahandlermodule.setCancelledStack"
+    cancelledStack.sort(compareOldOrders)
+    if cancelledStack.length > cancelFillStackHeight then cancelledStack.length = cancelFillStackHeight
     assetPairToCancelledStack[pair] = cancelledStack
     return
 
 datahandlermodule.setFilledStack = (pair, filledStack) ->
     log "datahandlermodule.setFilledStack"
+    filledStack.sort(compareOldOrders)
+    if filledStack.length > cancelFillStackHeight then filledStack.length = cancelFillStackHeight
     assetPairToFilledStack[pair] = filledStack
     return
 
