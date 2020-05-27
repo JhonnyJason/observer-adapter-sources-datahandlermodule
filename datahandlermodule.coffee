@@ -14,6 +14,8 @@ print = (arg) -> console.log(arg)
 assetPairToTickerInfo = {}
 assetPairToBuyStack = {}
 assetPairToSellStack = {}
+assetPairToCancelledStack = {}
+assetPairToFilledStack = {}
 assetToBalance = {}
 
 #endregion
@@ -43,6 +45,17 @@ datahandlermodule.setAssetBalance = (asset, balance) ->
     assetToBalance[asset] = balance
     return
 
+datahandlermodule.setCancelledStack = (pair, cancelledStack) ->
+    log "datahandlermodule.setCancelledStack"
+    assetPairToCancelledStack[pair] = cancelledStack
+    return
+
+datahandlermodule.setFilledStack = (pair, filledStack) ->
+    log "datahandlermodule.setFilledStack"
+    assetPairToFilledStack[pair] = filledStack
+    return
+
+
 datahandlermodule.setSellStack = (pair, sellStack) ->
     log "datahandlermodule.setSellStack"
     sellStack.sort(compareSells)
@@ -67,6 +80,14 @@ datahandlermodule.setTicker = (pair, ticker) ->
 datahandlermodule.getAssetBalance = (asset) ->
     log "datahandlermodule.getAssetBalance"
     return assetToBalance[asset]
+
+datahandlermodule.getFilledStack = (pair) ->
+    log "datahandlermodule.getFilledStack"
+    return assetPairToFilledStack[pair]
+
+datahandlermodule.getCancelledStack = (pair) ->
+    log "datahandlermodule.getCancelledStack"
+    return assetPairToCancelledStack[pair]
 
 datahandlermodule.getSellStack = (pair) ->
     log "datahandlermodule.getSellStack"
