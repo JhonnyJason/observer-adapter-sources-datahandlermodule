@@ -46,7 +46,7 @@ compareOldOrders = (el1, el2) ->
 #region exposedFunctions
 
 ############################################################
-#region getterFunctions
+#region setterFunctions
 datahandlermodule.setAssetBalance = (asset, balance) ->
     log "datahandlermodule.setAssetBalance"
     assetToBalance[asset] = balance
