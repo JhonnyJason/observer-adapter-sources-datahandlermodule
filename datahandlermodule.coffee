@@ -12,11 +12,23 @@ print = (arg) -> console.log(arg)
 ############################################################
 #region dataMaps
 assetPairToTickerInfo = {}
+assetPairToTickerInfoReady = {}
+
 assetPairToBuyStack = {}
+assetPairToBuyStackReady = {}
+
 assetPairToSellStack = {}
+assetPairToSellStackReady = {}
+
 assetPairToCancelledStack = {}
+assetPairToCancelledStackReady = {}
+
 assetPairToFilledStack = {}
+assetPairToFilledStackReady = {}
+
 assetToBalance = {}
+assetToBalanceReady = {}
+
 
 #endregion
 
@@ -50,6 +62,7 @@ compareOldOrders = (el1, el2) ->
 datahandlermodule.setAssetBalance = (asset, balance) ->
     log "datahandlermodule.setAssetBalance"
     assetToBalance[asset] = balance
+    assetToBalanceReady[asset] = true
     return
 
 datahandlermodule.setCancelledStack = (pair, cancelledStack) ->
@@ -57,6 +70,7 @@ datahandlermodule.setCancelledStack = (pair, cancelledStack) ->
     cancelledStack.sort(compareOldOrders)
     if cancelledStack.length > cancelFillStackHeight then cancelledStack.length = cancelFillStackHeight
     assetPairToCancelledStack[pair] = cancelledStack
+    assetPairToCancelledStackReady[pair] = true
     return
 
 datahandlermodule.setFilledStack = (pair, filledStack) ->
@@ -64,6 +78,7 @@ datahandlermodule.setFilledStack = (pair, filledStack) ->
     filledStack.sort(compareOldOrders)
     if filledStack.length > cancelFillStackHeight then filledStack.length = cancelFillStackHeight
     assetPairToFilledStack[pair] = filledStack
+    assetPairToFilledStackReady[pair] = true
     return
 
 
@@ -71,17 +86,20 @@ datahandlermodule.setSellStack = (pair, sellStack) ->
     log "datahandlermodule.setSellStack"
     sellStack.sort(compareSells)
     assetPairToSellStack[pair] = sellStack
+    assetPairToSellStackReady[pair] = true
     return
 
 datahandlermodule.setBuyStack = (pair, buyStack) ->
     log "datahandlermodule.setBuyStack"
     buyStack.sort(compareBuys)
     assetPairToBuyStack[pair] = buyStack
+    assetPairToBuyStackReady[pair] = true
     return
 
 datahandlermodule.setTicker = (pair, ticker) ->
     log "datahandlermodule.setTicker"
     assetPairToTickerInfo[pair] = ticker
+    assetPairToTickerInfoReady[pair] = true
     return
 
 #endregion
@@ -90,26 +108,32 @@ datahandlermodule.setTicker = (pair, ticker) ->
 #region getterFunctions
 datahandlermodule.getAssetBalance = (asset) ->
     log "datahandlermodule.getAssetBalance"
+    throw new Error("Balance not ready!") unless assetToBalanceReady[asset]
     return assetToBalance[asset]
 
 datahandlermodule.getFilledStack = (pair) ->
     log "datahandlermodule.getFilledStack"
+    throw new Error("FilledStack not ready!") unless assetPairToFilledStackReady[pair]
     return assetPairToFilledStack[pair]
 
 datahandlermodule.getCancelledStack = (pair) ->
     log "datahandlermodule.getCancelledStack"
+    throw new Error("CancelledStack not ready!") unless assetPairToCancelledStackReady[pair]
     return assetPairToCancelledStack[pair]
 
 datahandlermodule.getSellStack = (pair) ->
     log "datahandlermodule.getSellStack"
+    throw new Error("SellStack not ready!") unless assetPairToSellStackReady[pair]
     return assetPairToSellStack[pair]
 
 datahandlermodule.getBuyStack = (pair) ->
     log "datahandlermodule.getBuyStack"
+    throw new Error("BuyStack not ready!") unless assetPairToBuyStackReady[pair]
     return assetPairToBuyStack[pair]
 
 datahandlermodule.getTicker = (pair) ->
     log "datahandlermodule.getTicker"
+    throw new Error("Ticker not ready!") unless assetPairToTickerInfoReady[pair]
     return assetPairToTickerInfo[pair]
 
 #endregion
