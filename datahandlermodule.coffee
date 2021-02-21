@@ -63,7 +63,6 @@ datahandlermodule.setAssetBalance = (asset, balance) ->
     log "datahandlermodule.setAssetBalance"
     assetToBalance[asset] = balance
     assetToBalanceReady[asset] = true
-    print "set asset to ready: " + asset
     return
 
 datahandlermodule.setCancelledStack = (pair, cancelledStack) ->
